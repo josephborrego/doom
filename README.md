@@ -59,6 +59,7 @@ julia> Pkg.add("CxxWrap")
 - i had an import error issue because i didn't build it in the vizdoom directory before running basic.py
 
 python setup.py build   # (or python3)
+
 pip install -e .        # (or pip3)
 
 https://github.com/openai/doom-py/issues/9
