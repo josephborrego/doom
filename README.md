@@ -1,6 +1,8 @@
 # doom
 doom reinforcement learning project
 
+https://www.youtube.com/watch?v=Eoec3ljNjrE&t=30s
+
 downloads:
 - preconfigured vm 
 https://medium.com/@ageitgey/try-deep-learning-in-python-now-with-a-fully-pre-configured-vm-1d97d4c3e9b
