@@ -1,6 +1,9 @@
 from collections import deque
 import numpy as np
 
+# this needs more work
+# "memory" is actaully a prioritized experience replay buffer
+# xperience replay lets online reinforcement learning agents remember and reuse experiences from the past.
 class Memory():
     def __init__(self, max_size):
         self.buffer = deque(maxlen = max_size)
