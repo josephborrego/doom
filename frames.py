@@ -1,3 +1,6 @@
+# I was inspired to emabrk on this journey with the help from Thomas Simonini
+# # https://github.com/simoninithomas/Deep_reinforcement_learning_Course/blob/master/Deep%20Q%20Learning/Doom/Deep%20Q%20learning%20with%20Doom.ipynb
+
 import numpy as np
 from skimage import transform
 import skimage.transform
@@ -7,17 +10,21 @@ from PIL import Image
 stack_size = 4
 
 # https://towardsdatascience.com/image-pre-processing-c1aec0be3edf
+# Preprocessing is an important step, because we want to reduce the complexity of our states to reduce the computation time
+# needed for training.
+
 def preprocess_frame(frame):
+    # converts to gray scale
     src = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY).astype('uint8')
     #cropped_frame = frame[30:-10,30:-30] 
     #normalized_frame = cropped_frame/255.0 
     cropped_frame = src[30:-10, 30:-30]
     normalized_frame = cropped_frame/255.0
-    #img = cv2.imread(normalized_frame)
     #preprocessed_frame = skimage.transform.resize(normalized_frame, (84,84)) 
     width = int(normalized_frame.shape[1] * 60 / 100)
     height = int(normalized_frame.shape[0] * 60 / 100)
     dim = (width, height)
+    # resize the frame
     preprocessed_frame = cv2.resize(normalized_frame, dim, interpolation=cv2.INTER_LINEAR)
     preprocessed_frame = preprocessed_frame.astype(np.float32)
     # remove gaussian noise
@@ -26,8 +33,6 @@ def preprocess_frame(frame):
     blur = cv2.GaussianBlur(preprocessed_frame, (1, 9), 0).astype('uint8')
     # segmentation & morphology
     # segment - separating background from foreground objects &  more noise removal
-    # converts to gray scale
-    # gray = cv2.cvtColor(blur, cv2.COLOR_RGB2GRAY)
     # otsus binarization
     ret, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
     # apply another blur to improve the looks
@@ -49,8 +54,14 @@ def preprocess_frame(frame):
     #cv2.imshow('yo', sure_fg)
     return x
     #return markers
-
+    
+# https://pdfs.semanticscholar.org/74c3/5bb13e71cdd8b5a553a7e65d9ed125ce958e.pdf
 # stack frames is used for the experience replay buffer
+# Stacking frames is really important because it helps us to give have a sense of motion to our NN
+# For the first frame, we feed 4 frames
+# At each timestep, we add the new frame to deque and then we stack them to form a new stacked frame
+#And so onstack
+# If we're done, we create a new stack with 4 new frames (because we are in a new episode).
 def stack_frames(stacked_frames, state, is_new_episode):
     frame = preprocess_frame(state)
     if is_new_episode:
