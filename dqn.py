@@ -1,6 +1,13 @@
 import torch.nn as nn
 import torch
 
+# This is our Deep Q-learning model:
+#We take a stack of 4 frames as input
+#It passes through 3 convnets
+#Then it is flatened
+#Finally it passes through 2 FC layers
+#It outputs a Q value for each actions
+
 class DQN(nn.Module):
     def __init__(self, state_size, action_size, learning_rate, name='DQNetwork'):
         self.state_size = state_size
